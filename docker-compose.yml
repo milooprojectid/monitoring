@@ -1,7 +1,7 @@
-version: "3"
+version: "3.8"
 
 networks:
-  loki:
+  kepo:
 
 volumes:
   grafana-data:
@@ -13,16 +13,25 @@ services:
       - "3100:3100"
     command: -config.file=/etc/loki/local-config.yaml
     networks:
-      - loki
+      - kepo
+
+  prometheus:
+    image: prom/prometheus
+    ports:
+      -"9090:9090"
+    networks:
+      - kepo
     volumes:
-      - grafana-data:/var/lib/grafana
+      - ./config/prometheus-config.yml:/etc/prometheus/prometheus.yml
 
   grafana:
     image: grafana/grafana:master
     ports:
       - "3000:3000"
     networks:
-      - loki
+      - kepo
+    volumes:
+      - grafana-data:/var/lib/grafana
 
   # promtail:
   #   image: grafana/promtail:1.4.1
@@ -31,4 +40,4 @@ services:
   #     - ./promtail-config.yml:/etc/promtail/promtail-config.yml
   #   command: -config.file=/etc/promtail/promtail-config.yml
   #   networks:
-  #     - loki
+  #     - kepo
