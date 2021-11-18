@@ -17,18 +17,18 @@ services:
     volumes:
       - grafana-data:/var/lib/grafana
 
-  promtail:
-    image: grafana/promtail:1.4.1
-    volumes:
-      - /var/lib/docker/containers:/var/lib/docker/containers
-      - ./promtail-config.yml:/etc/promtail/promtail-config.yml
-    command: -config.file=/etc/promtail/promtail-config.yml
-    networks:
-      - loki
-
   grafana:
     image: grafana/grafana:master
     ports:
       - "3000:3000"
     networks:
       - loki
+
+  # promtail:
+  #   image: grafana/promtail:1.4.1
+  #   volumes:
+  #     - /var/lib/docker/containers:/var/lib/docker/containers
+  #     - ./promtail-config.yml:/etc/promtail/promtail-config.yml
+  #   command: -config.file=/etc/promtail/promtail-config.yml
+  #   networks:
+  #     - loki
